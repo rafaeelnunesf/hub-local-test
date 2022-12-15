@@ -18,6 +18,12 @@ export class UserService {
     if (!user) throw new NotFoundUserException();
     return { ...user, password: undefined };
   }
+  public async getUserByEMail(email: string): Promise<User> {
+    const user = await this.repository.findOne({ where: { email } });
+
+    if (!user) throw new NotFoundUserException();
+    return { ...user };
+  }
 
   public async createUser(body: CreateUserDto): Promise<User> {
     const user: User = {
