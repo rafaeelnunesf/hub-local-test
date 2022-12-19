@@ -9,11 +9,18 @@ async function bootstrap() {
   const config: ConfigService = app.get(ConfigService);
   const port: number = config.get<number>('PORT');
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-
-  await app.listen(port, () => {
-    console.log('Listening port', config.get<string>('PORT'));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+  app.setGlobalPrefix('api', {
+    exclude: ['auth/login', 'auth/signup', '/', '/me'],
   });
+
+  await app.listen(port);
 }
 
 bootstrap();
