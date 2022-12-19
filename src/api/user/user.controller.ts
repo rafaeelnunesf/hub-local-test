@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Param,
-  ParseIntPipe,
-  Post,
-} from '@nestjs/common';
-import { CreateUserDto } from './user.dto';
+import { Controller, Get, Inject, Param, ParseIntPipe } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -19,11 +10,5 @@ export class UserController {
   @Get(':id')
   public getUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.service.getUser(id);
-  }
-
-  // @Public()
-  @Post()
-  public async createUser(@Body() body: CreateUserDto): Promise<User> {
-    return await this.service.createUser(body);
   }
 }
