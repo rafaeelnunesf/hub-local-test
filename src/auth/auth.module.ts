@@ -1,20 +1,29 @@
 import { UserModule } from 'src/api/user/user.module';
 
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
+import * as dotenv from 'dotenv';
+import { AuthController } from './auth.controller';
+dotenv.config();
 
 @Module({
   imports: [
     UserModule,
     JwtModule.register({
-      secret: 'bananinha',
-      //   signOptions: { expiresIn: '60s' },
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
     }),
   ],
+  controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoginValidationMiddleware).forRoutes('auth/login');
+  }
+}
