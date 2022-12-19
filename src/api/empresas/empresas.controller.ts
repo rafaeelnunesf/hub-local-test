@@ -11,13 +11,14 @@ import {
 import { EmpresasService } from './empresas.service';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { CreateEmpresaRequest } from './models/CreateEmpresaRequest';
+import { CreateEmpresaDto } from './dto/create-empresa.dto';
 
 @Controller('empresas')
 export class EmpresasController {
   constructor(private readonly empresasService: EmpresasService) {}
 
   @Post()
-  create(@Request() req: CreateEmpresaRequest) {
+  create(@Body() body: CreateEmpresaDto, @Request() req: CreateEmpresaRequest) {
     const data = { ...req.body, userId: req.user.id };
     return this.empresasService.create(data);
   }
