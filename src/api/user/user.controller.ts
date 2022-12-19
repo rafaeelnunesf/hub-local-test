@@ -21,6 +21,7 @@ export class UserController {
     return this.service.getUser(id);
   }
 
+  // @Public()
   @Post()
   public async createUser(@Body() body: CreateUserDto): Promise<User> {
     return await this.service.createUser(body);
