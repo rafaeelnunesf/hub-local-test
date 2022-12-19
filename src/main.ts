@@ -3,9 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(AppModule);
@@ -19,9 +16,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  /*  app.setGlobalPrefix('api', {
-    exclude: ['auth/login', 'auth/sign-up', '/', '/me'],
-  }); */
+  app.setGlobalPrefix('api', {
+    exclude: ['auth/login', 'auth/signup', '/', '/me'],
+  });
 
   await app.listen(port);
 }
