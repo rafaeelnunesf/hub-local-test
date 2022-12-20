@@ -35,8 +35,14 @@ export class EmpresasService {
     return empresa;
   }
 
-  update(id: number, updateEmpresaDto: UpdateEmpresaDto) {
-    return `This action updates a #${id} empresa`;
+  async update(id: number, empresa: UpdateEmpresaDto) {
+    const existingEmpresa = await this.repository.findOneBy({ id });
+    if (!existingEmpresa) throw new EmpresaNotFoundException();
+
+    return this.repository.save({
+      ...existingEmpresa,
+      ...empresa,
+    });
   }
 
   remove(id: number) {
