@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { Empresa } from './empresa.entity';
 import { EmpresaAlreadyExistsException } from './exceptions/EmpresaAlreadyExists.exception';
+import { EmpresaNotFoundException } from './exceptions/EmpresaNotFound.exception';
 import { EmpresaData } from './models/EmpresaData.model';
 
 @Injectable()
@@ -27,8 +28,11 @@ export class EmpresasService {
     return await this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} empresa`;
+  async findOne(id: number) {
+    const empresa = await this.repository.findOneBy({ id });
+    if (!empresa) throw new EmpresaNotFoundException();
+
+    return empresa;
   }
 
   update(id: number, updateEmpresaDto: UpdateEmpresaDto) {

@@ -8,6 +8,7 @@ export class CreateEmpresaDto {
 
   @IsString()
   @IsNotEmpty()
+  @Matches(cnpjRegEx)
   cnpj: string;
 
   @IsOptional()
