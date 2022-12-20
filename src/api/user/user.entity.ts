@@ -1,16 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Empresa } from '../empresas/empresa.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  public id?: number;
+  id?: number;
 
   @Column({ type: 'varchar', length: 120 })
-  public name: string;
+  name: string;
 
   @Column({ type: 'varchar', length: 120, unique: true })
-  public email: string;
+  email: string;
 
   @Column()
-  public password: string;
+  password: string;
+
+  @OneToMany(() => Empresa, (empresa) => empresa.user)
+  empresas?: Empresa[];
 }
