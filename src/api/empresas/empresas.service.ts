@@ -45,7 +45,10 @@ export class EmpresasService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} empresa`;
+  async remove(id: number) {
+    const empresa = await this.repository.findOneBy({ id });
+    if (!empresa) throw new EmpresaNotFoundException();
+
+    await this.repository.remove(empresa);
   }
 }
