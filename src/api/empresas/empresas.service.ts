@@ -23,8 +23,8 @@ export class EmpresasService {
     return { ...createdEmpresa };
   }
 
-  findAll() {
-    return `This action returns all empresas`;
+  async findAll() {
+    return await this.repository.find();
   }
 
   findOne(id: number) {

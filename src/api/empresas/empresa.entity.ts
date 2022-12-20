@@ -6,6 +6,9 @@ export class Empresa {
   @PrimaryGeneratedColumn()
   id?: number;
 
+  @Column()
+  userId: number;
+
   @Column({ type: 'varchar', length: 120 })
   name: string;
 
