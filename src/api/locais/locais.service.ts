@@ -1,10 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { map } from 'rxjs';
+import { catchError, lastValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
+import { LocalNotFoundException } from './exceptions/localnotfound.exception';
 import { CEPNotValidException } from './exceptions/notvalidcep.exception';
 import { Local } from './local.entity';
 
@@ -12,36 +13,34 @@ import { Local } from './local.entity';
 export class LocaisService {
   @InjectRepository(Local)
   private readonly repository: Repository<Local>;
-
-  constructor(private readonly axios: HttpService) {}
+  constructor(private readonly http: HttpService) {}
 
   async create(local: CreateLocalDto) {
-    const url = `https://viacep.com.br/ws/${local.cep}/json/`;
+    const validatedData = await this.validateCep(+local.cep);
 
-    try {
-      const result = this.axios.get(url).pipe(
-        map((response) => {
-          return response.data;
-        }),
-      );
+    const data = { ...local, ...validatedData };
 
-      return result;
-    } catch (error) {
-      console.log(error);
-      if (error) throw new CEPNotValidException();
-    }
+    const savedData = await this.repository.save(data);
+
+    return savedData;
   }
 
-  findAll() {
-    return `This action returns all locais`;
+  async findAll(empresaId: number) {
+    return await this.repository.find({ where: { empresaId } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} locai`;
+  async findOne(id: number, empresaId: number) {
+    return await this.repository.find({ where: { id, empresaId } });
   }
 
-  update(id: number, local: UpdateLocalDto) {
-    return `This action updates a #${id} locai`;
+  async update(id: number, empresaId: number, local: UpdateLocalDto) {
+    const existingLocal = await this.repository.findOneBy({ id, empresaId });
+    if (!existingLocal) throw new LocalNotFoundException();
+
+    return this.repository.save({
+      ...existingLocal,
+      ...local,
+    });
   }
 
   remove(id: number) {
