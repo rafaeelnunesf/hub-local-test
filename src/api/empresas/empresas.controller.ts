@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { EmpresasService } from './empresas.service';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
-import { CreateEmpresaRequest } from './models/CreateEmpresaRequest';
+import { EmpresaRequest } from './models/CreateEmpresaRequest';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 
 @Controller()
@@ -18,13 +18,13 @@ export class EmpresasController {
   constructor(private readonly empresasService: EmpresasService) {}
 
   @Post()
-  create(@Body() body: CreateEmpresaDto, @Request() req: CreateEmpresaRequest) {
+  create(@Body() body: CreateEmpresaDto, @Request() req: EmpresaRequest) {
     const data = { ...req.body, userId: req.user.id };
     return this.empresasService.create(data);
   }
 
   @Get()
-  findAll(@Request() req: CreateEmpresaRequest) {
+  findAll(@Request() req: EmpresaRequest) {
     return this.empresasService.findAll(req.user.id);
   }
 

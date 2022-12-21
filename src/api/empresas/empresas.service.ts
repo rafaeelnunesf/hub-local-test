@@ -24,8 +24,8 @@ export class EmpresasService {
     return { ...createdEmpresa };
   }
 
-  async findAll(id: number) {
-    return await this.repository.find({ where: { id } });
+  async findAll(userId: number) {
+    return await this.repository.find({ where: { userId } });
   }
 
   async findOne(id: number) {
