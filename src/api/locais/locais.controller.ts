@@ -7,12 +7,11 @@ import {
   Param,
   Delete,
   Request,
-  HostParam,
 } from '@nestjs/common';
 import { LocaisService } from './locais.service';
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
-import { CreateLocalRequest } from './models/CreateLocalRequest';
+import { LocalRequest } from './models/CreateLocalRequest';
 
 @Controller()
 export class LocaisController {
@@ -21,26 +20,30 @@ export class LocaisController {
   @Post()
   create(
     @Body() body: CreateLocalDto,
-    @Param('empresaId') empresaId,
-    @Request() req: CreateLocalRequest,
+    @Param('empresaId') empresaId: string,
+    @Request() req: LocalRequest,
   ) {
     const data = { ...req.body, empresaId };
     return this.locaisService.create(data);
   }
 
   @Get()
-  findAll() {
-    return this.locaisService.findAll();
+  findAll(@Request() req: LocalRequest, @Param('empresaId') empresaId: string) {
+    return this.locaisService.findAll(+empresaId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.locaisService.findOne(+id);
+  findOne(@Param('id') id: string, @Param('empresaId') empresaId: string) {
+    return this.locaisService.findOne(+id, +empresaId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocaiDto: UpdateLocalDto) {
-    return this.locaisService.update(+id, updateLocaiDto);
+  update(
+    @Param('id') id: string,
+    @Param('empresaId') empresaId: string,
+    @Body() body: UpdateLocalDto,
+  ) {
+    return this.locaisService.update(+id, +empresaId, body);
   }
 
   @Delete(':id')
