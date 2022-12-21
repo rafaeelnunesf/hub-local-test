@@ -12,26 +12,21 @@ export class CreateLocalDto {
 
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   logradouro: string;
 
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   complemento: string;
 
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   bairro: string;
 
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   localidade: string;
 
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   uf: string;
 }

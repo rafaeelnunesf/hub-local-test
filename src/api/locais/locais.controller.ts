@@ -7,24 +7,24 @@ import {
   Param,
   Delete,
   Request,
+  HostParam,
 } from '@nestjs/common';
 import { LocaisService } from './locais.service';
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
 import { CreateLocalRequest } from './models/CreateLocalRequest';
 
-@Controller('locais')
+@Controller()
 export class LocaisController {
   constructor(private readonly locaisService: LocaisService) {}
 
   @Post()
   create(
     @Body() body: CreateLocalDto,
-    @Param(':empresaId') empresaId,
+    @Param('empresaId') empresaId,
     @Request() req: CreateLocalRequest,
   ) {
     const data = { ...req.body, empresaId };
-
     return this.locaisService.create(data);
   }
 

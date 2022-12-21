@@ -13,7 +13,7 @@ import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { CreateEmpresaRequest } from './models/CreateEmpresaRequest';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 
-@Controller('empresas')
+@Controller()
 export class EmpresasController {
   constructor(private readonly empresasService: EmpresasService) {}
 
@@ -24,8 +24,8 @@ export class EmpresasController {
   }
 
   @Get()
-  findAll() {
-    return this.empresasService.findAll();
+  findAll(@Request() req: CreateEmpresaRequest) {
+    return this.empresasService.findAll(req.user.id);
   }
 
   @Get(':id')
