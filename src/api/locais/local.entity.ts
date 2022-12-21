@@ -9,7 +9,7 @@ export class Local {
   @Column({ type: 'varchar', length: 120 })
   name: string;
 
-  @Column({ type: 'varchar', length: 8, unique: true })
+  @Column({ type: 'varchar', length: 8 })
   cep: string;
 
   @Column()
