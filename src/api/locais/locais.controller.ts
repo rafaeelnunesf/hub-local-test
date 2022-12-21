@@ -47,7 +47,7 @@ export class LocaisController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.locaisService.remove(+id);
+  remove(@Param('id') id: string, @Param('empresaId') empresaId: string) {
+    return this.locaisService.remove(+id, +empresaId);
   }
 }

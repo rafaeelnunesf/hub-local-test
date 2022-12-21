@@ -43,8 +43,11 @@ export class LocaisService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} locai`;
+  async remove(id: number, empresaId: number) {
+    const local = await this.repository.findOneBy({ id, empresaId });
+    if (!local) throw new LocalNotFoundException();
+
+    await this.repository.remove(local);
   }
   async validateCep(cep: number) {
     const url = `https://viacep.com.br/ws/${cep}/json/`;
