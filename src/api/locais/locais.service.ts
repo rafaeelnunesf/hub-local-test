@@ -47,4 +47,28 @@ export class LocaisService {
   remove(id: number) {
     return `This action removes a #${id} locai`;
   }
+  async validateCep(cep: number) {
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    const request = this.http
+      .get(url)
+      .pipe(map((res) => res.data))
+      .pipe(
+        catchError(() => {
+          throw new CEPNotValidException();
+        }),
+      );
+
+    const result = await lastValueFrom(request);
+    if (result.erro) throw new CEPNotValidException();
+
+    result.ibge = undefined;
+    result.gia = undefined;
+    result.ddd = undefined;
+    result.siafi = undefined;
+
+    result.cep = result.cep.replace('-', '');
+
+    return result;
+  }
 }
